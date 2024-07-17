@@ -9,27 +9,27 @@
 <body>
     <h1>TIC TAC TOE</h1>
     <div class="container">
-        <div class="cells" id="a1" onclick=""></div>
-        <div class="cells" id="a2" onclick=""></div>
-        <div class="cells" id="a3" onclick=""></div>
-        <div class="cells" id="a4" onclick=""></div>
-        <div class="cells" id="a5" onclick=""></div>
-        <div class="cells" id="a6" onclick=""></div>
-        <div class="cells" id="a7" onclick=""></div>
-        <div class="cells" id="a8" onclick=""></div>
-        <div class="cells" id="a9" onclick=""></div>
+        <div class="cells" id="a1" onclick="selectDiv(event)"></div>
+        <div class="cells" id="a2" onclick="selectDiv(event)"></div>
+        <div class="cells" id="a3" onclick="selectDiv(event)"></div>
+        <div class="cells" id="a4" onclick="selectDiv(event)"></div>
+        <div class="cells" id="a5" onclick="selectDiv(event)"></div>
+        <div class="cells" id="a6" onclick="selectDiv(event)"></div>
+        <div class="cells" id="a7" onclick="selectDiv(event)"></div>
+        <div class="cells" id="a8" onclick="selectDiv(event)"></div>
+        <div class="cells" id="a9" onclick="selectDiv(event)"></div>
     </div>
     <div class="userchoice">
         <h3>Choose what you want play with</h3>
         <div class="user_choice_images">
-            <div id="O" onclick=""> <img src="./images/O.png" alt=""></div>
-            <div id="X" onclick=""><img src="./images/X.png" alt=""></div>
+            <div onclick="getUserChoice(event)"> <img id="O"  src="./images/O.png" alt=""></div>
+            <div onclick="getUserChoice(event)"><img id="X"  src="./images/X.png" alt=""></div>
         </div>
         
     </div>
 
-    <div id="reset_btn_div">
-        <input type="button" value="Reset">
+    <div>
+        <input  id="reset_btn" type="button" value="Reset">
     </div>
 </body>
 <script src="./assets/scripts/script.js"></script>

@@ -30,6 +30,10 @@ body h1{
     cursor: pointer;
 }
 
+.cells img{
+    width: 100%;
+}
+
 .container #a1,
 #a2,
 #a3
@@ -80,8 +84,9 @@ body h1{
     transform: scale(1.1);
 }
 
-#reset_btn_div input{
+#reset_btn{
     padding: 0.5rem;
+    margin-top: 3rem;
     width: 100px;
     color: red;
     font-size: 1rem;
@@ -92,7 +97,7 @@ body h1{
     display: none;
 }
 
-#reset_btn_div input:hover{
+#reset_btn:hover{
     background-color: red;
     color: white;
     
