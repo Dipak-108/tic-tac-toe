@@ -36,11 +36,13 @@ function selectDiv(event) {
   // JSON.parse(userOccupied);
   console.log(userOccupied);
 
-  setTimeout(() => {
-    let computerOccupied = computerMove();
-
-    console.log(`tyoe of cmr ${typeof computerOccupied}`);
-  }, 2000);
+  do{
+    setTimeout(() => {
+      let computerOccupied = computerMove();
+  
+      console.log(`tyoe of cmr ${typeof computerOccupied}`);
+    }, 2000);
+  }while(false);
 
   return currentDiv;
 }
@@ -60,11 +62,11 @@ function computerMove() {
   computerChoice = getUserChoice()[1];
 
   function choosingIndex() {
-    return Math.floor(Math.random() * allDivs.length) + 1;
+    return Math.floor(Math.random() * allDivs.length);
   }
 
   let index = choosingIndex();
-
+  console.log(index);
   computerChosenDiv = allDivs[index];
   while (userOccupied.includes(computerChosenDiv)) {
     index = choosingIndex();
