@@ -1,8 +1,7 @@
 let allDivs = ["a1", "a2", "a3", "a4", "a5", "a6", "a7", "a8", "a9"];
 let userOccupied = [];
 let computerOccupied = [];
-let thisss = [];
-let fileldDivs = [];
+let index;
 let userChoice;
 let computerChoice;
 let userChoiceContainer = document.getElementsByClassName("userchoice")[0];
@@ -11,6 +10,16 @@ let images = {
   O: "./images/O.png",
   X: "./images/X.png",
 };
+let winnerPattern = [
+  [1, 2, 3],
+  [4, 5, 6],
+  [7, 8, 9],
+  [1, 4, 7],
+  [2, 5, 8],
+  [3, 6, 9],
+  [1, 5, 9],
+  [3, 5, 7],
+];
 
 // get user choice and computer choice
 function getUserChoice(event) {
@@ -23,6 +32,7 @@ function getUserChoice(event) {
   return [userChoice, computerChoice];
 }
 
+//get which box is selected by user in the game
 function selectDiv(event) {
   currentDiv = event.target.id;
   userChoice = getUserChoice()[0];
@@ -31,19 +41,8 @@ function selectDiv(event) {
     alert("First choose a sign to start game");
     return;
   }
-
-  let userOccupied = userMove()[1];
-  // JSON.parse(userOccupied);
-  console.log(userOccupied);
-
-  do{
-    setTimeout(() => {
-      let computerOccupied = computerMove();
-  
-      console.log(`tyoe of cmr ${typeof computerOccupied}`);
-    }, 2000);
-  }while(false);
-
+  userMove();
+  setTimeout(computerMove, 2000);
   return currentDiv;
 }
 
@@ -54,24 +53,17 @@ function userMove() {
   ).innerHTML = `<img src=${images[userChoice]} alt="">`;
   userOccupied.push(currentDiv);
   allDivs.splice(allDivs.indexOf(currentDiv), 1);
-  // console.log(allDivs);
+  setTimeout(() => {
+    if (allDivs.length == 0) {
+      movesFinish();
+    }
+  }, 1500);
   return [allDivs, userOccupied];
 }
 
 function computerMove() {
   computerChoice = getUserChoice()[1];
-
-  function choosingIndex() {
-    return Math.floor(Math.random() * allDivs.length);
-  }
-
-  let index = choosingIndex();
-  console.log(index);
-  computerChosenDiv = allDivs[index];
-  while (userOccupied.includes(computerChosenDiv)) {
-    index = choosingIndex();
-    console.log("index was same");
-  }
+  index = Math.floor(Math.random() * allDivs.length);
   computerChosenDiv = allDivs[index];
   computerOccupied.push(computerChosenDiv);
   allDivs.splice(allDivs.indexOf(computerChosenDiv), 1);
@@ -82,6 +74,13 @@ function computerMove() {
   return computerOccupied;
 }
 
+function checkWinner(checkDiv,playerSymbol) {
+if(checkDiv.length<3){
+  return;
+}
+}
+
 resetbtn.addEventListener("click", function () {
   window.location.reload();
 });
+
