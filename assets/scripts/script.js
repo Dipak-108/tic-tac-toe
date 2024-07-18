@@ -84,16 +84,14 @@ function checkWinner(checkDiv,playerSymbol) {
     return;
   }
   checkDiv.sort();
-  console.log(checkDiv);
-
+  
   for(let i=0;i<winnerPattern.length;i++){
     let winningArr=winnerPattern[i];
     
     let didWin = winningArr.every(element => checkDiv.includes(element));
     if(didWin===true){
       winnerMessage.style.display="block";
-      winnerMessage.innerHTML=`<span><p>🎉congratulations🎉 </p><img src=${images[playerSymbol]} alt=""> <p>🎉won🎉</p></span>`
-      console.log(`congratulations ${playerSymbol} won` );
+      winnerMessage.innerHTML=`<span><p>🎉congratulations🎉 </p><img src=${images[playerSymbol]} alt=""> <p>🎉won🎉</p></span>`;
       movesFinish();
     }
     
