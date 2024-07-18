@@ -6,20 +6,23 @@ let userChoice;
 let computerChoice;
 let userChoiceContainer = document.getElementsByClassName("userchoice")[0];
 let resetbtn = document.getElementById("reset_btn");
+let winnerMessage=document.getElementById("winnerMessage");
 let images = {
   O: "./images/O.png",
   X: "./images/X.png",
 };
+
 let winnerPattern = [
-  [1, 2, 3],
-  [4, 5, 6],
-  [7, 8, 9],
-  [1, 4, 7],
-  [2, 5, 8],
-  [3, 6, 9],
-  [1, 5, 9],
-  [3, 5, 7],
+  ["a1", "a2", "a3"],
+  ["a4", "a5", "a6"],
+  ["a7", "a8", "a9"],
+  ["a1", "a4", "a7"],
+  ["a2", "a5", "a8"],
+  ["a3", "a6", "a9"],
+  ["a1", "a5", "a9"],
+  ["a3", "a5", "a7"],
 ];
+
 
 // get user choice and computer choice
 function getUserChoice(event) {
@@ -42,7 +45,7 @@ function selectDiv(event) {
     return;
   }
   userMove();
-  setTimeout(computerMove, 2000);
+  setTimeout(computerMove, 1300);
   return currentDiv;
 }
 
@@ -53,6 +56,7 @@ function userMove() {
   ).innerHTML = `<img src=${images[userChoice]} alt="">`;
   userOccupied.push(currentDiv);
   allDivs.splice(allDivs.indexOf(currentDiv), 1);
+  checkWinner(userOccupied,userChoice);
   setTimeout(() => {
     if (allDivs.length == 0) {
       movesFinish();
@@ -70,17 +74,41 @@ function computerMove() {
   document.getElementById(
     computerChosenDiv
   ).innerHTML = `<img src=${images[computerChoice]} alt="">`;
+  checkWinner(computerOccupied,computerChoice);
 
   return computerOccupied;
 }
 
 function checkWinner(checkDiv,playerSymbol) {
-if(checkDiv.length<3){
-  return;
-}
-}
+  if(checkDiv.length<3){
+    return;
+  }
+  checkDiv.sort();
+  console.log(checkDiv);
+
+  for(let i=0;i<winnerPattern.length;i++){
+    let winningArr=winnerPattern[i];
+    
+    let didWin = winningArr.every(element => checkDiv.includes(element));
+    if(didWin===true){
+      winnerMessage.style.display="block";
+      winnerMessage.innerHTML=`<span><p>🎉congratulations🎉 </p><img src=${images[playerSymbol]} alt=""> <p>🎉won🎉</p></span>`
+      console.log(`congratulations ${playerSymbol} won` );
+      movesFinish();
+    }
+    
+  }
+  }
 
 resetbtn.addEventListener("click", function () {
   window.location.reload();
 });
+
+function movesFinish() {
+  setTimeout(() => {
+    alert("do you still want to play?");
+  window.location.reload();
+  }, 2000);
+}
+
 

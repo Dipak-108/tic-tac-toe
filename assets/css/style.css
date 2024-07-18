@@ -18,6 +18,23 @@ body h1{
     text-decoration: underline;
 }
 
+body #winnerMessage{
+    border: solid;
+    width: auto;
+    margin-bottom: 1rem;
+    display: none;
+    color: red;
+    font-size: 2rem;
+    margin-inline:auto;
+   
+}
+#winnerMessage span{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* flex-wrap: wrap; */
+}
+
 .container{
     
     display: grid;
@@ -101,4 +118,11 @@ body h1{
     background-color: red;
     color: white;
     
+}
+
+@media screen and (width<=500px){
+    #winnerMessage span{
+        flex-direction: column;
+        
+    }
 }
