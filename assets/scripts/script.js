@@ -6,7 +6,7 @@ let userChoice;
 let computerChoice;
 let userChoiceContainer = document.getElementsByClassName("userchoice")[0];
 let resetbtn = document.getElementById("reset_btn");
-let winnerMessage=document.getElementById("winnerMessage");
+let winnerMessage = document.getElementById("winnerMessage");
 let images = {
   O: "./images/O.png",
   X: "./images/X.png",
@@ -22,7 +22,6 @@ let winnerPattern = [
   ["a1", "a5", "a9"],
   ["a3", "a5", "a7"],
 ];
-
 
 // get user choice and computer choice
 function getUserChoice(event) {
@@ -54,9 +53,9 @@ function userMove() {
   document.getElementById(
     currentDiv
   ).innerHTML = `<img src=${images[userChoice]} alt="">`;
-  userOccupied.push(currentDiv);
+  userOccupied.unshift(currentDiv);
   allDivs.splice(allDivs.indexOf(currentDiv), 1);
-  checkWinner(userOccupied,userChoice);
+  checkWinner(userOccupied, userChoice);
   setTimeout(() => {
     if (allDivs.length == 0) {
       movesFinish();
@@ -67,6 +66,30 @@ function userMove() {
 
 function computerMove() {
   computerChoice = getUserChoice()[1];
+  // console.log(userOccupied.length);
+  if (userOccupied.length >= 2) {
+    for (let i = 0; i < userOccupied.length - 1; i++) {
+      let takenArrayKey = userOccupied[i];
+      for (let j = i + 1; j < userOccupied.length; j++) {
+        let abc = [];
+        let takenTogetherarray = userOccupied[j];
+        abc.push(takenArrayKey, takenTogetherarray);
+        abc.sort();
+        for (let k = 0; k < winnerPattern.length - 1; k++) {
+          let bestMoveArr = winnerPattern[k];
+          // console.log(abc);
+
+          let didWin = abc.every((element) => bestMoveArr.includes(element));
+
+          if(didWin===true){
+            console.log(bestMoveArr); //completed till the best array is found, tomorrow this needs to be refactored
+          }
+        }
+        
+      }
+    }
+  }
+
   index = Math.floor(Math.random() * allDivs.length);
   computerChosenDiv = allDivs[index];
   computerOccupied.push(computerChosenDiv);
@@ -74,29 +97,28 @@ function computerMove() {
   document.getElementById(
     computerChosenDiv
   ).innerHTML = `<img src=${images[computerChoice]} alt="">`;
-  checkWinner(computerOccupied,computerChoice);
+  checkWinner(computerOccupied, computerChoice);
 
   return computerOccupied;
 }
 
-function checkWinner(checkDiv,playerSymbol) {
-  if(checkDiv.length<3){
+function checkWinner(checkDiv, playerSymbol) {
+  if (checkDiv.length < 3) {
     return;
   }
   checkDiv.sort();
-  
-  for(let i=0;i<winnerPattern.length;i++){
-    let winningArr=winnerPattern[i];
-    
-    let didWin = winningArr.every(element => checkDiv.includes(element));
-    if(didWin===true){
-      winnerMessage.style.display="block";
-      winnerMessage.innerHTML=`<span><p>🎉congratulations🎉 </p><img src=${images[playerSymbol]} alt=""> <p>🎉won🎉</p></span>`;
+
+  for (let i = 0; i < winnerPattern.length; i++) {
+    let winningArr = winnerPattern[i];
+
+    let didWin = winningArr.every((element) => checkDiv.includes(element));
+    if (didWin === true) {
+      winnerMessage.style.display = "block";
+      winnerMessage.innerHTML = `<span><p>🎉congratulations🎉 </p><img src=${images[playerSymbol]} alt=""> <p>🎉won🎉</p></span>`;
       movesFinish();
     }
-    
   }
-  }
+}
 
 resetbtn.addEventListener("click", function () {
   window.location.reload();
@@ -105,8 +127,6 @@ resetbtn.addEventListener("click", function () {
 function movesFinish() {
   setTimeout(() => {
     alert("do you still want to play?");
-  window.location.reload();
+    window.location.reload();
   }, 2000);
 }
-
-
