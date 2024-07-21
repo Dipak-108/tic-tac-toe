@@ -2,6 +2,7 @@ let allDivs = ["a1", "a2", "a3", "a4", "a5", "a6", "a7", "a8", "a9"];
 let userOccupied = [];
 let computerOccupied = [];
 let index;
+let bestMoves = [];
 let userChoice;
 let computerChoice;
 let userChoiceContainer = document.getElementsByClassName("userchoice")[0];
@@ -20,7 +21,7 @@ let winnerPattern = [
   ["a2", "a5", "a8"],
   ["a3", "a6", "a9"],
   ["a1", "a5", "a9"],
-  ["a3", "a5", "a7"],
+  ["a3", "a5", "a7"]
 ];
 
 // get user choice and computer choice
@@ -44,7 +45,7 @@ function selectDiv(event) {
     return;
   }
   userMove();
-  setTimeout(computerMove, 1300);
+  setTimeout(computerMove,0);
   return currentDiv;
 }
 
@@ -54,6 +55,9 @@ function userMove() {
     currentDiv
   ).innerHTML = `<img src=${images[userChoice]} alt="">`;
   userOccupied.unshift(currentDiv);
+  userOccupied.sort();
+  // console.log(userOccupied," user occupied");
+
   allDivs.splice(allDivs.indexOf(currentDiv), 1);
   checkWinner(userOccupied, userChoice);
   setTimeout(() => {
@@ -67,36 +71,24 @@ function userMove() {
 function computerMove() {
   computerChoice = getUserChoice()[1];
   // console.log(userOccupied.length);
-  if (userOccupied.length >= 2) {
-    for (let i = 0; i < userOccupied.length - 1; i++) {
-      let takenArrayKey = userOccupied[i];
-      for (let j = i + 1; j < userOccupied.length; j++) {
-        let abc = [];
-        let takenTogetherarray = userOccupied[j];
-        abc.push(takenArrayKey, takenTogetherarray);
-        abc.sort();
-        for (let k = 0; k < winnerPattern.length - 1; k++) {
-          let bestMoveArr = winnerPattern[k];
-          // console.log(abc);
+  returnProbableWinningmove();
+  // console.log(bestMoves);
+  // console.log(userOccupied);
 
-          let didWin = abc.every((element) => bestMoveArr.includes(element));
+  
 
-          if(didWin===true){
-            console.log(bestMoveArr); //completed till the best array is found, tomorrow this needs to be refactored
-          }
-        }
-        
-      }
-    }
-  }
 
   index = Math.floor(Math.random() * allDivs.length);
   computerChosenDiv = allDivs[index];
+
   computerOccupied.push(computerChosenDiv);
+  // console.log(computerOccupied," computer occupied");
+
   allDivs.splice(allDivs.indexOf(computerChosenDiv), 1);
   document.getElementById(
     computerChosenDiv
   ).innerHTML = `<img src=${images[computerChoice]} alt="">`;
+  
   checkWinner(computerOccupied, computerChoice);
 
   return computerOccupied;
@@ -109,20 +101,57 @@ function checkWinner(checkDiv, playerSymbol) {
   checkDiv.sort();
 
   for (let i = 0; i < winnerPattern.length; i++) {
-    let winningArr = winnerPattern[i];
-
+    let winningArr = [...winnerPattern[i]];
     let didWin = winningArr.every((element) => checkDiv.includes(element));
-    if (didWin === true) {
+    console.log(didWin);
+    
+    if (didWin) {
       winnerMessage.style.display = "block";
       winnerMessage.innerHTML = `<span><p>🎉congratulations🎉 </p><img src=${images[playerSymbol]} alt=""> <p>🎉won🎉</p></span>`;
-      movesFinish();
+      return;
+      // movesFinish();
     }
   }
+  console.log("*********************");
 }
 
 resetbtn.addEventListener("click", function () {
   window.location.reload();
 });
+
+function returnProbableWinningmove() {
+  if (userOccupied.length >= 2) {
+    for (let i = 0; i < userOccupied.length - 1; i++) {
+      let IthArrayKey = userOccupied[i];
+      let searchingCombination = [];
+      for (let j = i + 1; j < userOccupied.length; j++) {
+        let takenTogetherarray = userOccupied[j];
+        searchingCombination.push(IthArrayKey, takenTogetherarray);
+        searchingCombination.sort();
+        for (let k = 0; k < winnerPattern.length; k++) {
+          let bestMoveArr = [...winnerPattern[k]];
+
+          let isPWMyes = searchingCombination.every((element) =>
+            bestMoveArr.includes(element)
+          );
+
+          if (isPWMyes) {
+
+            if (!bestMoves.includes(bestMoveArr)){
+              searchingCombination.forEach((element) => {
+                bestMoveArr.splice(bestMoveArr.indexOf(element), 1);
+              });
+              bestMoves.push(bestMoveArr[0]);
+            }
+              
+          }
+        }
+      }
+    }
+  }
+
+  // return bestMoves;
+}
 
 function movesFinish() {
   setTimeout(() => {
