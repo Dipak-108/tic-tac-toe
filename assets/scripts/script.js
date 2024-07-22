@@ -77,7 +77,17 @@ function userMove() {
 function computerMove() {
   computerChoice = getUserChoice()[1];
 
-  returnProbableWinningmove();
+  returnProbableWinningmove(computerOccupied);
+  if(
+    bestMoves.find((move) => {allDivs.includes(move)})
+  ){
+     computerChosenDiv = bestMoves.find((move) => allDivs.includes(move));
+  }
+  else{
+    returnProbableWinningmove(userOccupied);
+  }
+
+  
   index = Math.floor(Math.random() * allDivs.length);
   //checks if element of best move is present in allDivs(remaining divs) or not
   let computerChosenDiv = bestMoves.find((move) => allDivs.includes(move)) || allDivs[index]; //bestMoves comes from returnProbableWinningmove() function
@@ -117,13 +127,13 @@ function checkWinner(checkDiv, playerSymbol) {
 
 
 //done to check if user has any winning move and computer plays that move to neutralize user
-function returnProbableWinningmove() {
-  if (userOccupied.length >= 2) {
-    for (let i = 0; i < userOccupied.length - 1; i++) {
-      let IthArrayKey = userOccupied[i]; //[1,2,3,4] takes 1 initially
+function returnProbableWinningmove(xoccupied) {
+  if (xoccupied.length >= 2) {
+    for (let i = 0; i < xoccupied.length - 1; i++) {
+      let IthArrayKey = xoccupied[i]; //[1,2,3,4] takes 1 initially
       let searchingCombination = [];
-      for (let j = i + 1; j < userOccupied.length; j++) {
-        let takenTogetherarray = userOccupied[j]; //[1,2,3,4] takes 2 initially
+      for (let j = i + 1; j < xoccupied.length; j++) {
+        let takenTogetherarray = xoccupied[j]; //[1,2,3,4] takes 2 initially
         searchingCombination.push(IthArrayKey, takenTogetherarray); //pairs 1 with 2 and moves forward, next time its 1,3 and 1,4
         searchingCombination.sort();
         for (let k = 0; k < winnerPattern.length; k++) {
