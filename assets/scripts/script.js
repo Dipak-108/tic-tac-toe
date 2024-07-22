@@ -10,6 +10,7 @@ let computerChoice;
 let userChoiceContainer = document.getElementsByClassName("userchoice")[0];
 let resetbtn = document.getElementById("reset_btn");
 let winnerMessage = document.getElementById("winnerMessage");
+let container =document.getElementsByClassName("container")[0];
 
 let images = {
   O: "./images/O.png",
@@ -48,13 +49,13 @@ function selectDiv(event) {
     return;
   }
   userMove();
-  setTimeout(computerMove, 300);
+  setTimeout(computerMove, 1000);
   return currentDiv;
 }
 
-
 //function to play computer move
 function userMove() {
+  container.style.pointerEvents="none";
   userChoice = getUserChoice()[0];
   document.getElementById(
     currentDiv
@@ -72,25 +73,29 @@ function userMove() {
   return [allDivs, userOccupied];
 }
 
-
 //function to play computer move
 function computerMove() {
+  container.style.pointerEvents="auto";
+  container.addEventListener('onreload', function (event){
+    event.stopPropagation();
+      })
   computerChoice = getUserChoice()[1];
 
-  returnProbableWinningmove(computerOccupied);
-  if(
-    bestMoves.find((move) => {allDivs.includes(move)})
-  ){
-     computerChosenDiv = bestMoves.find((move) => allDivs.includes(move));
-  }
-  else{
+  returnProbableWinningmove(computerOccupied); //sends computer occupied divs for winning move if exist
+  if (
+    bestMoves.find((move) => {
+      allDivs.includes(move);
+    })
+  ) {
+    computerChosenDiv = bestMoves.find((move) => allDivs.includes(move));
+  } else {
     returnProbableWinningmove(userOccupied);
   }
 
-  
   index = Math.floor(Math.random() * allDivs.length);
   //checks if element of best move is present in allDivs(remaining divs) or not
-  let computerChosenDiv = bestMoves.find((move) => allDivs.includes(move)) || allDivs[index]; //bestMoves comes from returnProbableWinningmove() function
+  let computerChosenDiv =
+    bestMoves.find((move) => allDivs.includes(move)) || allDivs[index]; //bestMoves comes from returnProbableWinningmove() function
   computerOccupied.push(computerChosenDiv);
 
   allDivs.splice(allDivs.indexOf(computerChosenDiv), 1);
@@ -102,7 +107,6 @@ function computerMove() {
 
   return computerOccupied;
 }
-
 
 //function to check if any of the player is winner or not after 3 move are done
 function checkWinner(checkDiv, playerSymbol) {
@@ -123,8 +127,6 @@ function checkWinner(checkDiv, playerSymbol) {
     }
   }
 }
-
-
 
 //done to check if user has any winning move and computer plays that move to neutralize user
 function returnProbableWinningmove(xoccupied) {
@@ -157,8 +159,7 @@ function returnProbableWinningmove(xoccupied) {
   }
 }
 
-
-//function to reload the game if all moves are finished 
+//function to reload the game if all moves are finished
 function movesFinish() {
   setTimeout(() => {
     alert("do you still want to play?");
