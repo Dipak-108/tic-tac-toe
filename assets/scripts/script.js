@@ -1,13 +1,16 @@
 let allDivs = ["a1", "a2", "a3", "a4", "a5", "a6", "a7", "a8", "a9"];
 let userOccupied = [];
 let computerOccupied = [];
-let index;
 let bestMoves = [];
+
+let index;
 let userChoice;
 let computerChoice;
+
 let userChoiceContainer = document.getElementsByClassName("userchoice")[0];
 let resetbtn = document.getElementById("reset_btn");
 let winnerMessage = document.getElementById("winnerMessage");
+
 let images = {
   O: "./images/O.png",
   X: "./images/X.png",
@@ -22,7 +25,7 @@ let winnerPattern = [
   ["a3", "a6", "a9"],
   ["a1", "a5", "a9"],
   ["a3", "a5", "a7"],
-];
+]; //all the winning pattern are listed here to check later during the game
 
 // get user choice and computer choice
 function getUserChoice(event) {
@@ -45,10 +48,12 @@ function selectDiv(event) {
     return;
   }
   userMove();
-  setTimeout(computerMove, 0);
+  setTimeout(computerMove, 300);
   return currentDiv;
 }
 
+
+//function to play computer move
 function userMove() {
   userChoice = getUserChoice()[0];
   document.getElementById(
@@ -67,12 +72,15 @@ function userMove() {
   return [allDivs, userOccupied];
 }
 
+
+//function to play computer move
 function computerMove() {
   computerChoice = getUserChoice()[1];
 
   returnProbableWinningmove();
   index = Math.floor(Math.random() * allDivs.length);
-  let computerChosenDiv = bestMoves.find(move => allDivs.includes(move)) || allDivs[index];;
+  //checks if element of best move is present in allDivs(remaining divs) or not
+  let computerChosenDiv = bestMoves.find((move) => allDivs.includes(move)) || allDivs[index]; //bestMoves comes from returnProbableWinningmove() function
   computerOccupied.push(computerChosenDiv);
 
   allDivs.splice(allDivs.indexOf(computerChosenDiv), 1);
@@ -85,6 +93,8 @@ function computerMove() {
   return computerOccupied;
 }
 
+
+//function to check if any of the player is winner or not after 3 move are done
 function checkWinner(checkDiv, playerSymbol) {
   if (checkDiv.length < 3) {
     return;
@@ -104,21 +114,20 @@ function checkWinner(checkDiv, playerSymbol) {
   }
 }
 
-resetbtn.addEventListener("click", function () {
-  window.location.reload();
-});
 
+
+//done to check if user has any winning move and computer plays that move to neutralize user
 function returnProbableWinningmove() {
   if (userOccupied.length >= 2) {
     for (let i = 0; i < userOccupied.length - 1; i++) {
-      let IthArrayKey = userOccupied[i];
+      let IthArrayKey = userOccupied[i]; //[1,2,3,4] takes 1 initially
       let searchingCombination = [];
       for (let j = i + 1; j < userOccupied.length; j++) {
-        let takenTogetherarray = userOccupied[j];
-        searchingCombination.push(IthArrayKey, takenTogetherarray);
+        let takenTogetherarray = userOccupied[j]; //[1,2,3,4] takes 2 initially
+        searchingCombination.push(IthArrayKey, takenTogetherarray); //pairs 1 with 2 and moves forward, next time its 1,3 and 1,4
         searchingCombination.sort();
         for (let k = 0; k < winnerPattern.length; k++) {
-          let bestMoveArr = [...winnerPattern[k]];
+          let bestMoveArr = [...winnerPattern[k]]; //done to avoid mutation of global winnerPattern array
 
           let doesContain = searchingCombination.every((element) =>
             bestMoveArr.includes(element)
@@ -127,7 +136,7 @@ function returnProbableWinningmove() {
           if (doesContain) {
             searchingCombination.forEach((element) => {
               bestMoveArr.splice(bestMoveArr.indexOf(element), 1);
-            });
+            }); //checks if each element of searching combinatin is in each array of winning pattern or not  [bestMoveArr=winningPattern[k]]
 
             if (!bestMoves.includes(bestMoveArr[0]))
               bestMoves.push(bestMoveArr[0]);
@@ -136,13 +145,18 @@ function returnProbableWinningmove() {
       }
     }
   }
-
-  // return bestMoves;
 }
 
+
+//function to reload the game if all moves are finished 
 function movesFinish() {
   setTimeout(() => {
     alert("do you still want to play?");
     window.location.reload();
   }, 2000);
 }
+
+//function to reload window after player clicks reset button
+resetbtn.addEventListener("click", function () {
+  window.location.reload();
+});
