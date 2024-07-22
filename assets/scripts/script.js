@@ -71,15 +71,8 @@ function computerMove() {
   computerChoice = getUserChoice()[1];
 
   returnProbableWinningmove();
-  console.log(bestMoves);
-  console.log("userOccupied",userOccupied);
-
-
-  
-
   index = Math.floor(Math.random() * allDivs.length);
-  computerChosenDiv = allDivs[index];
-
+  let computerChosenDiv = bestMoves.find(move => allDivs.includes(move)) || allDivs[index];;
   computerOccupied.push(computerChosenDiv);
 
   allDivs.splice(allDivs.indexOf(computerChosenDiv), 1);
